@@ -1,0 +1,14 @@
+ktor:
+    application:
+        modules:
+            - com.example.ApplicationKt.module
+    deployment:
+        port: 9000
+mongodb:
+  uri: "mongodb://localhost:27017"
+  database: "ktor_sample_db"
+
+jwt:
+  domain: "https://jwt-provider-domain/"
+  audience: "jwt-audience"
+  realm: "ktor sample app"
