@@ -32,4 +32,12 @@ dependencies {
     implementation(libs.ktor.server.config.yaml)
     testImplementation(libs.ktor.server.test.host)
     testImplementation(libs.kotlin.test.junit)
+    implementation("io.ktor:ktor-server-core:2.3.2")
+    implementation("io.ktor:ktor-server-netty:2.3.2")
+    implementation("io.ktor:ktor-server-auth:2.3.2")
+    implementation("io.ktor:ktor-server-auth-jwt:2.3.2")
+    implementation("io.ktor:ktor-server-cors:2.3.2")
+    implementation("io.ktor:ktor-server-content-negotiation:2.3.2")
+    implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
+
 }
