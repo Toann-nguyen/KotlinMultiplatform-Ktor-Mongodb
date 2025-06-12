@@ -32,6 +32,8 @@ fun Application.configureRouting() {
 
     // Gọi cấu hình cars routing
     configureCarsRouting()
+
+
 }
 
 fun Application.configureCarsRouting() {
