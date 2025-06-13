@@ -22,4 +22,5 @@ fun Application.module() {
     configureDatabases()
     configureRouting()
     configureCarsRouting()
+    configAuthRouting()
 }

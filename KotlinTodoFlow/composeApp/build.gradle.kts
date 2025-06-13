@@ -1,4 +1,4 @@
-import org.jetbrains.compose.desktop.application.dsl.TargetFormat
+
 import org.jetbrains.kotlin.gradle.ExperimentalKotlinGradlePluginApi
 import org.jetbrains.kotlin.gradle.ExperimentalWasmDsl
 import org.jetbrains.kotlin.gradle.dsl.JvmTarget
@@ -9,6 +9,7 @@ plugins {
     alias(libs.plugins.androidApplication)
     alias(libs.plugins.composeMultiplatform)
     alias(libs.plugins.composeCompiler)
+    kotlin("plugin.serialization") version "2.0.0"
 }
 
 kotlin {
@@ -51,14 +52,16 @@ kotlin {
     }
     
     sourceSets {
-        
         androidMain.dependencies {
             implementation(compose.preview)
             implementation(libs.androidx.activity.compose)
             implementation(libs.ktor.client.okhttp)
+            implementation("io.ktor:ktor-client-okhttp:2.3.2")
+            implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.7.0")
         }
         iosMain.dependencies {
             implementation(libs.ktor.client.okhttp)
+            implementation("io.ktor:ktor-client-darwin:2.3.2")
         }
         commonMain.dependencies {
             implementation(compose.runtime)
@@ -70,8 +73,14 @@ kotlin {
             implementation(libs.androidx.lifecycle.viewmodel)
             implementation(libs.androidx.lifecycle.runtimeCompose)
             implementation(libs.ktor.client.core)
-            implementation(libs.ktor.client.core)
             implementation(libs.kotlinx.coroutines.core)
+            implementation("io.ktor:ktor-client-core:2.3.2")
+            implementation("io.ktor:ktor-client-content-negotiation:2.3.2")
+            implementation("io.ktor:ktor-serialization-kotlinx-json:2.3.2")
+            implementation(libs.ktor.client.logging)
+            implementation(libs.ktor.serialization.kotlinx.json)
+            implementation(libs.ktor.client.content.negotiation)
+            implementation(libs.ktor.client.encoding)
         }
         commonTest.dependencies {
             implementation(libs.kotlin.test)

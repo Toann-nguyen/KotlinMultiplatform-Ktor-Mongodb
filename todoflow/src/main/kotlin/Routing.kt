@@ -2,6 +2,11 @@ package com.example
 
 import com.auth0.jwt.JWT
 import com.auth0.jwt.algorithms.Algorithm
+import com.example.models.LoginRequest
+import com.example.models.LoginResponse
+import com.example.models.RegisterRequest
+import com.example.models.UserResponse
+import com.example.service.UserService
 import com.mongodb.client.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
@@ -30,11 +35,91 @@ fun Application.configureRouting() {
         staticResources("/static", "static")
     }
 
-    // Gọi cấu hình cars routing
+    // Gọi cấu hình  routing
     configureCarsRouting()
-
+    configAuthRouting()
 
 }
+
+fun Application.configAuthRouting(){
+    val mongoDatabase = connectToMongoDB()
+    val UserService = UserService(mongoDatabase)
+    routing {
+        route("/auth") {
+            post("/register") {
+                try {
+                    println("Received register request")
+                    val request = call.receive<RegisterRequest>()
+                    println("Parsed request: $request")
+
+                    val response = UserService.registerUser(request)
+                    println("Response: $response")
+
+                    call.respond(response)
+                } catch (e: Exception) {
+                    println("Error in register: ${e.message}")
+                    e.printStackTrace()
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        LoginResponse(
+                            success = false,
+                            message = "Lỗi xử lý dữ liệu: ${e.message}"
+                        )
+                    )
+                }
+            }
+
+            post("/login") {
+                try {
+                    println("Received login request")
+                    val request = call.receive<LoginRequest>()
+                    println("Parsed request: username=${request.username}")
+
+                    val response = UserService.loginUser(request)
+                    println("Response: $response")
+
+                    call.respond(response)
+                } catch (e: Exception) {
+                    println("Error in login: ${e.message}")
+                    e.printStackTrace()
+                    call.respond(
+                        HttpStatusCode.BadRequest,
+                        LoginResponse(
+                            success = false,
+                            message = "Lỗi xử lý dữ liệu: ${e.message}"
+                        )
+                    )
+                }
+            }
+
+            get("/profile/{id}") {
+                try {
+                    val userId = call.parameters["id"] ?: return@get call.respond(
+                        HttpStatusCode.BadRequest,
+                        "User ID is required"
+                    )
+
+                    val user = UserService.getUserById(userId)
+                    if (user != null) {
+                        call.respond(
+                            UserResponse(
+                                id = user.id!!,
+                                username = user.username,
+                                email = user.email
+                            )
+                        )
+                    } else {
+                        call.respond(HttpStatusCode.NotFound, "User not found")
+                    }
+                } catch (e: Exception) {
+                    println("Error in profile: ${e.message}")
+                    call.respond(HttpStatusCode.InternalServerError, "Server error")
+                }
+            }
+        }
+    }
+}
+
 
 fun Application.configureCarsRouting() {
     val mongoDatabase = connectToMongoDB()
