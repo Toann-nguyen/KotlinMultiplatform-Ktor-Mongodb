@@ -28,10 +28,9 @@ import kotlintodoflow.composeapp.generated.resources.Res
 import kotlintodoflow.composeapp.generated.resources.compose_multiplatform
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.ui.tooling.preview.Preview
-import org.toannguyen.kotlintodoflow.models.User
+import org.toannguyen.kotlintodoflow.data.remote.dto.User
 import org.toannguyen.kotlintodoflow.ui.LoginScreen
-import org.toannguyen.kotlintodoflow.viewmodel.AuthViewModel
-import org.toannguyen.kotlintodoflow.Greeting
+import org.toannguyen.kotlintodoflow.presentation.viewmodels.AuthViewModel
 
 @Composable
 @Preview
